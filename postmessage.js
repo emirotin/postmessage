@@ -25,7 +25,15 @@
  !function (name, context, definition) {
   if (typeof module != 'undefined' && module.exports) module.exports = definition();
   else if (typeof define == 'function' && define.amd) define(definition);
-  else context[name] = definition();
+  else {
+    var self = definition(),
+      prev = context[name];
+    self.noConflict = function () {
+      context[name] = prev;
+      return self;
+    };
+    context[name] = self;
+  }
 }('pm', this, function () {
 
   "use strict";
